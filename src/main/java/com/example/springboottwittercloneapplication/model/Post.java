@@ -1,53 +1,68 @@
 package com.example.springboottwittercloneapplication.model;
 
 import jakarta.persistence.*;
-
-
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long postId;
+
     private String postBody;
-    private LocalDateTime date;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<com.example.springboottwittercloneapplication.model.Comment> comments;
 
-    public void setId(long id) {
-        this.id = id;
+    public Long getPostId() {
+        return postId;
     }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
+    }
+
+    public String getPostBody() {
+        return postBody;
+    }
+
     public void setPostBody(String postBody) {
         this.postBody = postBody;
     }
-    public void setDate(LocalDateTime date) {
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
-    public void setUser(User user) {
-        this.user = user;
+
+    public List<Comment> getComments() {
+        return comments;
     }
+
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
-    public long getId() {
-        return id;
-    }
-    public String getPostBody() {
-        return postBody;
-    }
-    public LocalDateTime getDate() {
-        return date;
-    }
     public User getUser() {
         return user;
     }
-    public List<Comment> getComments() {
-        return comments;
+
+    public void setUser(User user) {
+        this.user = user;
     }
+
+
 }
